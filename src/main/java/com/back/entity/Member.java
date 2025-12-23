@@ -13,9 +13,16 @@ public class Member extends BaseIdAndTime {
     private String password;
     private String nickname;
 
+    // 활동 점수 : 글 작성 시 3점, 댓글 작성 시 1점
+    private int activityScore;
+
     public Member(String username, String password, String nickname) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
+    }
+
+    public int increaseActivityScore(int amount) {
+        return this.activityScore += amount;
     }
 }
