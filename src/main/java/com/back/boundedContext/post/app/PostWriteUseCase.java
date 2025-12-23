@@ -13,12 +13,9 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class PostService {
+public class PostWriteUseCase {
     private final PostRepository postRepository;
     private final EventPublisher eventPublisher;
-    public long count(){
-        return postRepository.count();
-    }
 
     public Post write(Member author, String title, String content){
         Post post = postRepository.save(new Post(author, title, content));
@@ -43,9 +40,5 @@ public class PostService {
          *  createdAt, updateAt 등 채워짐
          *  엔티티가 영속 상태(Persistnet)로 전환됨.
          */
-    }
-
-    public Optional<Post> findById(int id) {
-        return postRepository.findById(id);
     }
 }
