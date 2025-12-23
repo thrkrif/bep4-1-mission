@@ -6,6 +6,8 @@ import com.back.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class PostService {
@@ -25,5 +27,9 @@ public class PostService {
          *  createdAt, updateAt 등 채워짐
          *  엔티티가 영속 상태(Persistnet)로 전환됨.
          */
+    }
+
+    public Optional<Post> findById(int id) {
+        return postRepository.findById(id);
     }
 }
