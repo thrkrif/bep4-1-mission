@@ -17,7 +17,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
  * 굳이 왜 BaseEntity에서 분리했느냐?
  * 이후에 id가 없는 도메인이 존재할 수 있기 때문
  */
-public class BaseIdAndTime {
+public class BaseIdAndTime extends BaseEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private int id;

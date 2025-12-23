@@ -1,5 +1,7 @@
 package com.back.global.jpa.entity;
 
+import com.back.global.eventPublisher.EventPublisher;
+import com.back.global.global.GlobalConfig;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
@@ -12,5 +14,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class BaseEntity {
     public String getModelTypeCode() {
         return this.getClass().getSimpleName();
+    }
+
+    protected void publishEvent(Object event) {
+        GlobalConfig.getEventPublisher().publish(event);
     }
 }
