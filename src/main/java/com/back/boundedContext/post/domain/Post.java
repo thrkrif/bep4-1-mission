@@ -14,6 +14,7 @@ import java.util.List;
 import static jakarta.persistence.CascadeType.PERSIST;
 import static jakarta.persistence.CascadeType.REMOVE;
 @Entity
+@Table(name = "POST_POST")
 @NoArgsConstructor
 @Getter
 public class Post extends BaseIdAndTime {
