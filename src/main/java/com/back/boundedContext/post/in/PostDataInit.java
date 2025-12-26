@@ -1,11 +1,7 @@
-package com.back.global.initData;
+package com.back.boundedContext.post.in;
 
-
-import com.back.boundedContext.member.domain.Member;
 import com.back.boundedContext.post.app.PostFacade;
 import com.back.boundedContext.post.domain.Post;
-import com.back.boundedContext.member.app.MemberFacade;
-import com.back.boundedContext.post.app.PostWriteUseCase;
 import com.back.boundedContext.post.domain.PostMember;
 import com.back.global.rsData.RsData;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +9,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.core.annotation.Order;
 import org.springframework.transaction.annotation.Transactional;
 @Configuration
 @Slf4j
@@ -24,23 +21,20 @@ import org.springframework.transaction.annotation.Transactional;
  * 프록시를 이용하여 설정을 한거다?
  * 너무 깊게 생각하지는 마라
  */
-public class DataInit {
-    private final DataInit self;
-    private final MemberFacade memberFacade;
+public class PostDataInit {
+    private final PostDataInit self;
     private final PostFacade postFacade;
 
-    public DataInit(@Lazy DataInit self,
-                    MemberFacade memberFacade,
-                    PostFacade postFacade) {
+    public PostDataInit(@Lazy PostDataInit self,
+                        PostFacade postFacade) {
         this.self = self;
-        this.memberFacade = memberFacade;
         this.postFacade = postFacade;
     }
 
     @Bean
+    @Order(2)
     public ApplicationRunner baseInitDataRunner() {
         return args -> {
-            self.makeBaseMembers();
             self.makeBasePosts();
             self.makeBasePostComments();
         };
@@ -92,17 +86,4 @@ public class DataInit {
         RsData<Post> post6 = postFacade.write(user3Member, "제목6", "내용6");
     }
 
-    @Transactional
-    public void makeBaseMembers() {
-        // 빌드할 때마다 계속 실행되는건데
-        // 초기 데이터가 있으면 굳이 하지 않아도 되니까 실행하지마라
-        if (memberFacade.count() > 0) return;
-
-        Member systemMember = memberFacade.join("system", "1234", "시스템").getData();
-        Member holdingMember = memberFacade.join("holding", "1234", "홀딩").getData();
-        Member adminMember = memberFacade.join("admin", "1234", "관리자").getData();
-        Member user1Member = memberFacade.join("user1", "1234", "유저1").getData();
-        Member user2Member = memberFacade.join("user2", "1234", "유저2").getData();
-        Member user3Member = memberFacade.join("user3", "1234", "유저3").getData();
-    }
 }
