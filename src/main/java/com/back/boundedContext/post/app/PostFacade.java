@@ -17,13 +17,13 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class PostFacade {
-    private final PostRepository postRepository;
-    private final PostMemberRepository postMemberRepository;
+    private final PostSupport postSupport;
     private final PostWriteUseCase postWriteUseCase;
+    private final PostSyncMemberUseCase postSyncMemberUseCase;
 
     @Transactional(readOnly = true)
     public long count(){
-        return postRepository.count();
+        return postSupport.count();
     }
 
     @Transactional
@@ -33,30 +33,32 @@ public class PostFacade {
 
     @Transactional(readOnly = true)
     public Optional<Post> findById(int id){
-        return postRepository.findById(id);
+        return postSupport.findById(id);
     }
 
     @Transactional
     public PostMember syncMember(MemberDto member){
-        PostMember postMember = new PostMember(
-                member.getId(),
-                member.getCreateDate(),
-                member.getModifyDate(),
-                member.getUsername(),
-                "",
-                member.getNickname(),
-                member.getActivityScore()
-        );
+        PostMember postMember = postSyncMemberUseCase.syncMember(member);
+        // 아래 로직 유스 케이스에서 진행
+//        PostMember postMember = new PostMember(
+//                member.getId(),
+//                member.getCreateDate(),
+//                member.getModifyDate(),
+//                member.getUsername(),
+//                "",
+//                member.getNickname(),
+//                member.getActivityScore()
+//        );
+//
+//        postMember.setId(member.getId());
+//        postMember.setCreateDate(member.getCreateDate());
+//        postMember.setModifyDate(member.getModifyDate());
 
-        postMember.setId(member.getId());
-        postMember.setCreateDate(member.getCreateDate());
-        postMember.setModifyDate(member.getModifyDate());
-
-        return postMemberRepository.save(postMember);
+        return postSupport.save(postMember);
     }
 
     @Transactional(readOnly = true)
-    public Optional<PostMember> findPostMemberByUsername(String username){
-        return postMemberRepository.findByUsername(username);
+    public Optional<PostMember> findMemberByUsername(String username){
+        return postSupport.findMemberByUsername(username);
     }
 }
