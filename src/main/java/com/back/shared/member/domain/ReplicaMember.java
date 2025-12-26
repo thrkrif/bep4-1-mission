@@ -11,7 +11,7 @@ import org.springframework.cglib.core.Local;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
-@Setter(value = AccessLevel.PROTECTED)
+@Setter
 @Getter
 @NoArgsConstructor
 public abstract class ReplicaMember extends BaseMember{
