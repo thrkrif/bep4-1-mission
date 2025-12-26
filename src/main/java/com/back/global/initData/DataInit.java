@@ -6,6 +6,7 @@ import com.back.boundedContext.post.app.PostFacade;
 import com.back.boundedContext.post.domain.Post;
 import com.back.boundedContext.member.app.MemberFacade;
 import com.back.boundedContext.post.app.PostWriteUseCase;
+import com.back.global.rsData.RsData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
@@ -82,12 +83,12 @@ public class DataInit {
         Member user2Member = memberFacade.findByUsername("user2").get();
         Member user3Member = memberFacade.findByUsername("user3").get();
 
-        Post post1 = postFacade.write(user1Member, "제목1", "내용1").getData(); // Rs<Post>에서 getData를 통해 Post 객체만 가져 옴.
-        Post post2 = postFacade.write(user1Member, "제목2", "내용2").getData();
-        Post post3 = postFacade.write(user1Member, "제목3", "내용3").getData();
-        Post post4 = postFacade.write(user2Member, "제목4", "내용4").getData();
-        Post post5 = postFacade.write(user2Member, "제목5", "내용5").getData();
-        Post post6 = postFacade.write(user3Member, "제목6", "내용6").getData();
+        RsData<Post> post1 = postFacade.write(user1Member, "제목1", "내용1");
+        RsData<Post> post2 = postFacade.write(user1Member, "제목2", "내용2");
+        RsData<Post> post3 = postFacade.write(user1Member, "제목3", "내용3");
+        RsData<Post> post4 = postFacade.write(user2Member, "제목4", "내용4");
+        RsData<Post> post5 = postFacade.write(user2Member, "제목5", "내용5");
+        RsData<Post> post6 = postFacade.write(user3Member, "제목6", "내용6");
     }
 
     @Transactional
