@@ -19,13 +19,13 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class MemberFacade {
-    private final MemberRepository memberRepository;
     private final MemberJoinUseCase memberJoinUseCase;
-    private final MemberPolicy memberPolicy;
+    private final MemberGetRandomSecureTipUseCase memberGetRandomSecureTipUseCase;
+    private final MemberSupport memberSupport;
 
     @Transactional(readOnly = true)
     public long count() {
-        return memberRepository.count();
+        return memberSupport.count();
     }
 
     @Transactional
@@ -35,14 +35,14 @@ public class MemberFacade {
 
     @Transactional(readOnly = true)
     public Optional<Member> findByUsername(String username) {
-        return memberRepository.findByUsername(username);
+        return memberSupport.findByUsername(username);
     }
     @Transactional(readOnly = true)
     public Optional<Member> findById(int id){
-        return memberRepository.findById(id);
+        return memberSupport.findById(id);
     }
 
     public String getRandomSecureTip(){
-        return "비밀번호의 유효기간은 %d일 입니다.".formatted(memberPolicy.getNeedToChangePasswordDays());
+        return memberGetRandomSecureTipUseCase.getRandomSecureTip();
     }
 }
