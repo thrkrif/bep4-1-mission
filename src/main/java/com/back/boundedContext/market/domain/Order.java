@@ -21,6 +21,7 @@ public class Order extends BaseIdAndTime {
     private MarketMember buyer;
     private LocalDateTime requestPaymentDate;
     private LocalDateTime paymentDate;
+    private LocalDateTime cancelDate; // 추가됨
     private long price;
     private long salePrice;
 
@@ -74,4 +75,12 @@ public class Order extends BaseIdAndTime {
         requestPaymentDate = null;
     }
 
+    public boolean isCanceled() {
+        return cancelDate != null;
+    }
+
+    public boolean isPaymentInProgress(){
+        return requestPaymentDate != null &&
+                paymentDate == null && cancelDate == null;
+    }
 }
