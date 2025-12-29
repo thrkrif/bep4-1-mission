@@ -39,9 +39,6 @@ public class TossPaymentsService {
                 amount
         );
 
-        log.info("TossPaymentsSecretKey = {}", tossSecretKey);
-        log.info("RequestBody = {}", requestBody);
-
         try {
             ResponseEntity<Map> responseEntity = createConfirmRequest(requestBody)
                     .retrieve()
