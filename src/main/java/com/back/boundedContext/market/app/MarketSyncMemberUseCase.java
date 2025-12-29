@@ -1,19 +1,17 @@
-package com.back.boundedContext.post.app;
+package com.back.boundedContext.market.app;
 
-import com.back.boundedContext.post.domain.PostMember;
-import com.back.boundedContext.post.out.PostMemberRepository;
+import com.back.boundedContext.market.domain.MarketMember;
+import com.back.boundedContext.market.out.MarketMemberRepository;
 import com.back.shared.member.dto.MemberDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class PostSyncMemberUseCase {
-
-    private final PostMemberRepository postMemberRepository;
-
-    public PostMember syncMember(MemberDto member){
-        PostMember postMember = new PostMember(
+public class MarketSyncMemberUseCase {
+    private MarketMemberRepository marketMemberRepository;
+    public MarketMember syncMember(MemberDto member) {
+        MarketMember marketMember = new MarketMember(
                 member.getId(),
                 member.getCreateDate(),
                 member.getModifyDate(),
@@ -23,6 +21,7 @@ public class PostSyncMemberUseCase {
                 member.getActivityScore()
         );
 
-        return postMemberRepository.save(postMember);
+        return marketMemberRepository.save(marketMember);
     }
+
 }

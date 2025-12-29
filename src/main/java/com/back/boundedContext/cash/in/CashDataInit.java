@@ -39,11 +39,6 @@ public class CashDataInit {
 
     @Transactional
     public void makeBaseCredits() {
-        Optional<CashMember> user1Opt = cashFacade.findMemberByUsername("user1");
-        if (user1Opt.isEmpty()) {
-            log.warn("CashMember 동기화 대기 중... 초기 데이터 생성 건너뜀");
-            return;
-        }
         CashMember user1Member = cashFacade.findMemberByUsername("user1").get();
         CashMember user2Member = cashFacade.findMemberByUsername("user2").get();
 
