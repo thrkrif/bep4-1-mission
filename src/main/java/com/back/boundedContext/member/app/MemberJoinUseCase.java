@@ -8,6 +8,7 @@ import com.back.global.rsData.RsData;
 import com.back.shared.member.dto.MemberDto;
 import com.back.shared.member.event.MemberJoinedEvent;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MemberJoinUseCase {
     private final MemberRepository memberRepository;
     private final EventPublisher eventPublisher;
@@ -35,6 +37,7 @@ public class MemberJoinUseCase {
          * 🌟 나중에 이벤트 종류 늘어나면 지옥
          */
         eventPublisher.publish(new MemberJoinedEvent(new MemberDto(member)));
+        log.info("MemberJoinedEvent 발행됨: {}", member.getUsername());
 
         return new RsData<>("201-1", "%d번 회원이 생성되었습니다.".formatted(member.getId()), member);
     }

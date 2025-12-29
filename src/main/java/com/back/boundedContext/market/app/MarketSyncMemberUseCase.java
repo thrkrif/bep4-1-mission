@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class MarketSyncMemberUseCase {
-    private MarketMemberRepository marketMemberRepository;
+    private final MarketMemberRepository marketMemberRepository;
     public MarketMember syncMember(MemberDto member) {
         MarketMember marketMember = new MarketMember(
                 member.getId(),
