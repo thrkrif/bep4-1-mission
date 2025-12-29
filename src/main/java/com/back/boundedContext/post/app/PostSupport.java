@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -33,5 +34,13 @@ public class PostSupport {
 
     public PostMember save(PostMember member){
         return postMemberRepository.save(member);
+    }
+
+    public List<Post> findAll(){
+        return postRepository.findAll();
+    }
+
+    public List<Post> findByOrderByIdDesc(){
+        return postRepository.findByOrderByIdDesc();
     }
 }

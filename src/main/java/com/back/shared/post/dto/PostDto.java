@@ -1,12 +1,15 @@
 package com.back.shared.post.dto;
 
 import com.back.boundedContext.post.domain.Post;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
-@AllArgsConstructor
+import static com.fasterxml.jackson.annotation.JsonCreator.*;
+
+@AllArgsConstructor(onConstructor_ = @JsonCreator(mode = Mode.PROPERTIES))
 @Getter
 public class PostDto {
     private final int id;
