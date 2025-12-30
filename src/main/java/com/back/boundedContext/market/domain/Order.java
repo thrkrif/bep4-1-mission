@@ -65,7 +65,7 @@ public class Order extends BaseIdAndTime {
 
         publishEvent(
                 new MarketOrderPaymentRequestedEvent(
-                        new OrderDto(this), // 여기서 this는 어떤 객체를 의미하는거지?
+                        toDto(),
                         pgPaymentAmount
                 )
         );
@@ -83,4 +83,19 @@ public class Order extends BaseIdAndTime {
         return requestPaymentDate != null &&
                 paymentDate == null && cancelDate == null;
     }
+
+    public OrderDto toDto() {
+        return new OrderDto(
+                getId(),
+                getCreateDate(),
+                getModifyDate(),
+                buyer.getId(),
+                buyer.getNickname(),
+                price,
+                salePrice,
+                requestPaymentDate,
+                paymentDate
+        );
+    }
+
 }

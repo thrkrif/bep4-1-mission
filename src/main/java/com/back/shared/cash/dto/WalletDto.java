@@ -1,17 +1,12 @@
 package com.back.shared.cash.dto;
 
-
-import com.back.boundedContext.cash.domain.Wallet;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 // 이렇게 사용하면 필드에 final 그대로 유지해도 된다.
-@AllArgsConstructor(
-        onConstructor_ = @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-)
+@AllArgsConstructor
 @Getter
 public class WalletDto {
     private final int id;
@@ -20,15 +15,4 @@ public class WalletDto {
     private final int holderId;
     private final String holderName;
     private final long balance;
-
-    public WalletDto(Wallet wallet){
-        this(
-                wallet.getId(),
-                wallet.getCreateDate(),
-                wallet.getModifyDate(),
-                wallet.getHolder().getId(),
-                wallet.getHolder().getUsername(),
-                wallet.getBalance()
-        );
-    }
 }

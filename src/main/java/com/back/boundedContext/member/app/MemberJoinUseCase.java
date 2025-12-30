@@ -36,7 +36,7 @@ public class MemberJoinUseCase {
          * 🌟 이벤트 리스너가 의미를 추측해야 함
          * 🌟 나중에 이벤트 종류 늘어나면 지옥
          */
-        eventPublisher.publish(new MemberJoinedEvent(new MemberDto(member)));
+        eventPublisher.publish(new MemberJoinedEvent(member.toDto()));
         log.info("MemberJoinedEvent 발행됨: {}", member.getUsername());
 
         return new RsData<>("201-1", "%d번 회원이 생성되었습니다.".formatted(member.getId()), member);
