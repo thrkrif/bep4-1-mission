@@ -97,13 +97,13 @@ public class MarketFacade {
     }
 
     @Transactional
-    public void handle(CashOrderPaymentSucceededEvent event){
-        marketCompleteOrderPaymentUseCase.handle(event);
+    public void completeOrderPayment(int orderId){
+        marketCompleteOrderPaymentUseCase.completeOrderPayment(orderId);
     }
 
     @Transactional
-    public void handle(CashOrderPaymentFailedEvent event){
-        marketCancelOrderRequestPaymentUseCase.handle(event);
+    public void cancelOrderRequestPayment(int orderId){
+        marketCancelOrderRequestPaymentUseCase.cancelOrderRequestPayment(orderId);
     }
 
 }

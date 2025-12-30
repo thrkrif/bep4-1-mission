@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/member/api/v1/members")
+@RequestMapping("/api/v1/member/members")
 @RequiredArgsConstructor
 public class ApiV1MemberController {
     private final MemberFacade memberFacade; // in -> Facade(app) 으로 접근
 
-    @GetMapping("randomSecureTip")
+    @GetMapping("/randomSecureTip")
     @Transactional(readOnly = true)
     public String getRandomSecureTip(){
         return memberFacade.getRandomSecureTip();

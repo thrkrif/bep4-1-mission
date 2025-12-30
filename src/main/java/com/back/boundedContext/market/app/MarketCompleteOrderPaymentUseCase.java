@@ -11,8 +11,16 @@ import org.springframework.stereotype.Service;
 public class MarketCompleteOrderPaymentUseCase {
     private final OrderRepository orderRepository;
 
-    public void handle(CashOrderPaymentSucceededEvent event){
-        Order order = orderRepository.findById(event.getOrder().getId()).get();
+    // 유스케이스에서 CashOrderPaymentSucceededEvent 사용 안하도록!
+
+//    public void handle(CashOrderPaymentSucceededEvent event){
+//        Order order = orderRepository.findById(event.getOrder().getId()).get();
+//
+//        order.completePayment();
+//    }
+
+    public void completeOrderPayment(int orderId){
+        Order order = orderRepository.findById(orderId).get();
 
         order.completePayment();
     }
