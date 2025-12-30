@@ -28,6 +28,7 @@ public class OrderItem extends BaseIdAndTime {
     // 수수료
     private double payoutRate = MarketPolicy.PRODUCT_PAYOUT_RATE;
 
+
     public OrderItem(Order order, Product product,
                       String productName, long price, long salePrice){
         this.order = order;
@@ -51,7 +52,16 @@ public class OrderItem extends BaseIdAndTime {
                 productName,
                 price,
                 salePrice,
-                payoutRate
+                payoutRate,
+                getPayoutFee(),
+                getSalePriceWithoutFee()
         );
+    }
+    public long getPayoutFee() {
+        return MarketPolicy.calculatePayoutFee(getSalePrice(), getPayoutRate());
+    }
+
+    public long getSalePriceWithoutFee() {
+        return MarketPolicy.calculateSalePriceWithoutFee(getSalePrice(), getPayoutRate());
     }
 }
