@@ -2,11 +2,13 @@ package com.back.boundedContext.market.domain;
 
 import com.back.global.jpa.entity.BaseIdAndTime;
 import com.back.shared.market.dto.OrderDto;
+import com.back.shared.market.event.MarketOrderPaymentCompletedEvent;
 import com.back.shared.market.event.MarketOrderPaymentRequestedEvent;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ import java.util.List;
 @Getter
 @Table(name = "MARKET_ORDER")
 @NoArgsConstructor
+@Slf4j
 public class Order extends BaseIdAndTime {
     @ManyToOne(fetch = FetchType.LAZY)
     private MarketMember buyer;
@@ -52,8 +55,12 @@ public class Order extends BaseIdAndTime {
         salePrice += product.getSalePrice();
     }
 
+    // 주문 완료!
     public void completePayment(){
-        paymentDate = LocalDateTime.now();
+        log.info("🎯 Order.completePayment() 실행: orderId={}", getId());
+        paymentDate = LocalDateTime.now(); // 주문 시간을 저장
+        // 이벤트 발생
+        publishEvent(new MarketOrderPaymentCompletedEvent(toDto()));
     }
 
     public boolean isPaid(){

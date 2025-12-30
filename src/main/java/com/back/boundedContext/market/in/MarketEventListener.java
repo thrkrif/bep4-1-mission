@@ -41,14 +41,14 @@ public class MarketEventListener {
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void cancelOrderRequestPayment(CashOrderPaymentSucceededEvent event){
+    public void handle(CashOrderPaymentFailedEvent event){
         int orderId = event.getOrder().getId();
         marketFacade.cancelOrderRequestPayment(orderId);
     }
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void completeOrderPayment(CashOrderPaymentFailedEvent event){
+    public void handle(CashOrderPaymentSucceededEvent event){
         int orderId = event.getOrder().getId();
         marketFacade.completeOrderPayment(orderId);
     }
