@@ -4,6 +4,7 @@ import com.back.boundedContext.payout.app.PayoutFacade;
 import com.back.shared.market.event.MarketOrderPaymentCompletedEvent;
 import com.back.shared.member.event.MemberJoinedEvent;
 import com.back.shared.member.event.MemberModifiedEvent;
+import com.back.shared.payout.event.PayoutMemberCreatedEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
@@ -30,6 +31,12 @@ public class PayoutEventListener {
     @Transactional(propagation = REQUIRES_NEW)
     public void handle(MemberModifiedEvent event){
         payoutFacade.syncMember(event.getMember());
+    }
+
+    @TransactionalEventListener(phase = AFTER_COMMIT)
+    @Transactional(propagation = REQUIRES_NEW)
+    public void handle(PayoutMemberCreatedEvent event) {
+        payoutFacade.createPayout(event.getMember());
     }
 
     // 주문을 확인하고 중간 레이어(PayoutCandidate)에 주문을 저장함
