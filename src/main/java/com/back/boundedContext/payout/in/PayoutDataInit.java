@@ -4,12 +4,6 @@ import com.back.boundedContext.payout.app.PayoutFacade;
 import com.back.boundedContext.payout.domain.PayoutPolicy;
 import com.back.standard.ut.Util;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.ApplicationRunner;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.core.annotation.Order;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.batch.core.job.Job;
 import org.springframework.batch.core.job.JobExecution;
 import org.springframework.batch.core.job.parameters.InvalidJobParametersException;
@@ -19,7 +13,12 @@ import org.springframework.batch.core.launch.JobExecutionAlreadyRunningException
 import org.springframework.batch.core.launch.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.launch.JobOperator;
 import org.springframework.batch.core.launch.JobRestartException;
-
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.core.annotation.Order;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -32,7 +31,6 @@ public class PayoutDataInit {
     private final PayoutFacade payoutFacade;
     private final JobOperator jobOperator;
     private final Job payoutCollectItemsJob;
-
 
     public PayoutDataInit(
             @Lazy PayoutDataInit self,
@@ -53,6 +51,7 @@ public class PayoutDataInit {
             self.forceMakePayoutReadyCandidatesItems();
             self.collectPayoutItemsMore();
             self.runCollectPayoutItemsBatchJob();
+            self.completePayoutsMore();
         };
     }
 
@@ -70,9 +69,6 @@ public class PayoutDataInit {
     @Transactional
     public void collectPayoutItemsMore() {
         payoutFacade.collectPayoutItemsMore(4);
-        // 4개 작업은 배치로 할거임.
-//        payoutFacade.collectPayoutItemsMore(2);
-//        payoutFacade.collectPayoutItemsMore(2);
     }
 
     public void runCollectPayoutItemsBatchJob() {
@@ -94,5 +90,12 @@ public class PayoutDataInit {
         } catch (JobRestartException e) {
             log.error("job restart exception", e);
         }
+    }
+
+    @Transactional
+    public void completePayoutsMore() {
+        payoutFacade.completePayoutsMore(4);
+        payoutFacade.completePayoutsMore(2);
+        payoutFacade.completePayoutsMore(2);
     }
 }
