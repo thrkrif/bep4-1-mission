@@ -3,6 +3,7 @@ package com.back.boundedContext.member.app;
 import com.back.boundedContext.member.domain.Member;
 import com.back.boundedContext.member.out.MemberRepository;
 import com.back.global.eventPublisher.EventPublisher;
+import com.back.global.eventPublisher.KafkaEventPublisher;
 import com.back.global.exception.DomainException;
 import com.back.global.rsData.RsData;
 import com.back.shared.member.dto.MemberDto;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 public class MemberJoinUseCase {
     private final MemberRepository memberRepository;
     private final EventPublisher eventPublisher;
+    private final KafkaEventPublisher kafkaEventPublisher;
 
     // 회원가입
     public RsData<Member> join(String username, String password, String nickname) {
@@ -30,13 +32,8 @@ public class MemberJoinUseCase {
         );
         Member member = memberRepository.save(new Member(username, password, nickname));
 
-        /**
-         * 굳이 왜 MemberJoinedEvent로 DTO를 감쌈?
-         * 🌟 어떤 '사건'인지 알려주기 위함
-         * 🌟 이벤트 리스너가 의미를 추측해야 함
-         * 🌟 나중에 이벤트 종류 늘어나면 지옥
-         */
-        eventPublisher.publish(new MemberJoinedEvent(member.toDto()));
+        kafkaEventPublisher.publish(new MemberJoinedEvent(member.toDto()));
+//        eventPublisher.publish(new MemberJoinedEvent(member.toDto()));
         log.info("MemberJoinedEvent 발행됨: {}", member.getUsername());
 
         return new RsData<>("201-1", "%d번 회원이 생성되었습니다.".formatted(member.getId()), member);

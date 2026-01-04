@@ -7,6 +7,7 @@ import com.back.shared.member.event.MemberModifiedEvent;
 import com.back.shared.payout.event.PayoutCompletedEvent;
 import com.back.shared.payout.event.PayoutMemberCreatedEvent;
 import lombok.RequiredArgsConstructor;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,16 +23,17 @@ import static org.springframework.transaction.event.TransactionPhase.AFTER_COMMI
 public class PayoutEventListener {
     private final PayoutFacade payoutFacade;
 
-    @TransactionalEventListener(phase = AFTER_COMMIT)
+//    @TransactionalEventListener(phase = AFTER_COMMIT)
+@KafkaListener(topics = "MemberJoinedEvent", groupId = "PayoutEventListener__handleMemberJoined")
     @Transactional(propagation = REQUIRES_NEW)
     public void handle(MemberJoinedEvent event){
-        payoutFacade.syncMember(event.getMember());
+        payoutFacade.syncMember(event.member());
     }
 
     @TransactionalEventListener(phase = AFTER_COMMIT)
     @Transactional(propagation = REQUIRES_NEW)
     public void handle(MemberModifiedEvent event){
-        payoutFacade.syncMember(event.getMember());
+        payoutFacade.syncMember(event.member());
     }
 
     @TransactionalEventListener(phase = AFTER_COMMIT)

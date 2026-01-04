@@ -7,6 +7,7 @@ import com.back.shared.market.event.MarketMemberCreatedEvent;
 import com.back.shared.member.event.MemberJoinedEvent;
 import com.back.shared.member.event.MemberModifiedEvent;
 import lombok.RequiredArgsConstructor;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,17 +21,18 @@ public class MarketEventListener {
     private final MarketFacade marketFacade;
 
     // 회원가입이 진행될 때 MarketMember에도 정보를 추가한다
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+//    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    @KafkaListener(topics = "MemberJoinedEvent", groupId = "MarketEventListener__handleMemberJoined")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void handle(MemberJoinedEvent event){
-        marketFacade.syncMember(event.getMember());
+        marketFacade.syncMember(event.member());
     }
 
     // 회원정보 수정 시 MarketMember에도 정보를 추가한다
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void handle(MemberModifiedEvent event){
-        marketFacade.syncMember(event.getMember());
+        marketFacade.syncMember(event.member());
     }
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)

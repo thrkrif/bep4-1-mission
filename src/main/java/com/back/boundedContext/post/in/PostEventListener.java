@@ -4,6 +4,7 @@ import com.back.boundedContext.post.app.PostFacade;
 import com.back.shared.member.event.MemberJoinedEvent;
 import com.back.shared.member.event.MemberModifiedEvent;
 import lombok.RequiredArgsConstructor;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,17 +16,31 @@ import org.springframework.transaction.event.TransactionalEventListener;
 public class PostEventListener {
     private final PostFacade postFacade;
 
+//    // 회원 가입 이벤트
+//    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+//    @Transactional(propagation = Propagation.REQUIRES_NEW)
+//    public void handle(MemberJoinedEvent event){
+//        postFacade.syncMember(event.member());
+//    }
+//
+//    // 회원 수정 이벤트
+//    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+//    @Transactional(propagation = Propagation.REQUIRES_NEW)
+//    public void handle(MemberModifiedEvent event) {
+//        postFacade.syncMember(event.member());
+//    }
+
     // 회원 가입 이벤트
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    @KafkaListener(topics = "MemberJoinedEvent", groupId = "PostEventListener__handleMemberJoined")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void handle(MemberJoinedEvent event){
-        postFacade.syncMember(event.getMember());
+        postFacade.syncMember(event.member());
     }
 
     // 회원 수정 이벤트
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void handle(MemberModifiedEvent event) {
-        postFacade.syncMember(event.getMember());
+        postFacade.syncMember(event.member());
     }
 }

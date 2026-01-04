@@ -1,11 +1,7 @@
 package com.back.shared.member.event;
 
 import com.back.shared.member.dto.MemberDto;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import com.back.standard.event.HaveEventName;
 
-@Getter
-@AllArgsConstructor
-public class MemberModifiedEvent {
-    private final MemberDto member;
+public record MemberModifiedEvent(MemberDto member) implements HaveEventName {
 }
